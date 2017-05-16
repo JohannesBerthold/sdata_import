@@ -102,7 +102,7 @@ if __name__ == '__main__':
     root_path = "/method/fosta"
     for (dirpath, dirnames, filenames) in os.walk(root_path):
         for index, file_i in enumerate(filenames):
-            if file_i.endswith("xlsx"):
+            if file_i.endswith(".xlsx"):
                 f.append(os.path.join(dirpath, file_i))
     print(f[0])
     measurement = Measurement(f[0])
