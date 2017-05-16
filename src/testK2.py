@@ -98,7 +98,7 @@ if __name__ == '__main__':
     files = []
     for (dirpath, dirnames, filenames) in os.walk(path):
         for index, file_i in enumerate(filenames):
-            if file_i.endswith(".xlsx") and:
+            if file_i.endswith(".xlsx"):
                 files.append(os.path.join(dirpath, file_i))
 
     exportpath = "/tmp/tp_ks"
