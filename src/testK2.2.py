@@ -48,7 +48,10 @@ def import_ks2_series(file_path):
             angle = float(angle.lower().replace("°","").replace("grad",""))
         except ValueError as exp:
             pass
-        direction = values[9]
+        try:
+            direction = values[9]
+        except IndexError as exp:
+            pass
         cls = sdata.experiments.ks2.KS2_Test
 
     elif specimen.lower() in ["scherzug"]:
@@ -65,7 +68,10 @@ def import_ks2_series(file_path):
         test.metadata.set_attr(name="vsid", value=vsid, description="Test Series ID", unit="-", dtype="str")
         if test.__class__.__name__.startswith("KS2"):
             test.metadata.set_attr(name="angle", value=angle, description="loading angle", unit="grad", dtype=float)
-            test.metadata.set_attr(name="direction", value=direction, description="direction", unit="-", dtype="str")
+            try:
+                test.metadata.set_attr(name="direction", value=direction, description="direction", unit="-", dtype="str")
+            except UnboundLocalError as exp:
+                pass
         test.metadata.set_attr(name="testseries", value=series.uuid, description="Test Series UUID", unit="-", dtype="str")
         test.metadata.set_attr(name="specimen", value=specimen, description="name of specimen", unit="-", dtype="str")
         test.metadata.set_attr(name="connection", value=connection, description="connection type", unit="-", dtype="str")
@@ -99,19 +105,19 @@ def import_ks2_series(file_path):
     return series
 
 if __name__ == '__main__':
-    path = "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/"
+    path = "/method/fosta/P1219-CrasiFü_Prognosetool/1_Ergebnisse"
             #"Reihe_06_HC340LA_1,5_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_07_HC340LA_1,5_ENAW6016_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_08_HC340LA_2,0_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_09_HC340LA_2,0_ENAW6016_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_11_HC340LA_1,5_AlSi7Mg0,3_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_13_HC340LA_1,0_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_15_HC340LA_1,5_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_16_HC340LA_1,5_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_17_HC340LA_2,0_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_25_HCT980XD_1,75_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_26_HCT980XD_1,75_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_27_22MnB5_1,0_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_28_22MnB5_1,5_ENAW7021_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_33_ENAW6016_1,0_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_35_ENAW6016_1,5_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_36_ENAW6016_2,0_HC340LA_1,5", "file:///method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_40_ENAW6016_1,5_AlSi7Mg0,3_3,0"]
     files = []
     for (dirpath, dirnames, filenames) in os.walk(path):
         for index, file_i in enumerate(filenames):
             if file_i.endswith(".xlsx"):
                     files.append(os.path.join(dirpath, file_i))
-    tpname = "P1032"
-    exportpath = "/tmp/tp_ks"
+    tpname = "P1219"
+    exportpath = "/tmp/tp_P1219"
     if os.path.exists(exportpath):
         sdata.testprogram.TestProgram.clear_folder(exportpath)
     tp = sdata.testprogram.TestProgram.from_folder(exportpath)
-    tp.metadata.set_attr(name="P1032-Einseitig_Zugänglich", value=tpname, unit="-", dtype="str")
+    tp.metadata.set_attr(name="P1219-CrasiFü_Prognosetool", value=tpname, unit="-", dtype="str")
     # for fil in os.listdir(path):
     #     print(fil)
     #     if fil.endswith(".xlsx"):

@@ -107,7 +107,7 @@ if __name__ == '__main__':
             if file_i.endswith(".xlsx"):
                     files.append(os.path.join(dirpath, file_i))
     tpname = "P1032"
-    exportpath = "/tmp/tp_ks"
+    exportpath = "/tmp/tp_P1032"
     if os.path.exists(exportpath):
         sdata.testprogram.TestProgram.clear_folder(exportpath)
     tp = sdata.testprogram.TestProgram.from_folder(exportpath)
@@ -130,3 +130,4 @@ if __name__ == '__main__':
 
     tp.to_folder(exportpath)
     tp.tree_folder(exportpath)
+103
