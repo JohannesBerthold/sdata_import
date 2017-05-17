@@ -21,7 +21,7 @@ fixed_uuid =_fixed_uuid()
 def import_ks2_series(file_path):
     """load singe test series"""
 
-    df = pd.read_excel(file_path, sheetname="Daten", header=None, skiprows=3, parse_cols=None)
+    df = pd.read_excel(file_path, sheetname="Daten", header=None, skiprows=3, parse_cols=None, dtypes=float)
     filename = os.path.split(file_path)[1]
     print("filename", filename)
     name = os.path.splitext(filename)[0]
@@ -78,6 +78,8 @@ def import_ks2_series(file_path):
 
         try:
             dfchosen = df[idxs]
+            dfchosen.dropna(inplace=True)
+
         except KeyError as exp:
             print("skip {}".format(idxs))
             continue
@@ -94,12 +96,13 @@ def import_ks2_series(file_path):
     return series
 
 if __name__ == '__main__':
-    path = "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse"
+    path = "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/"
+            #"Reihe_06_HC340LA_1,5_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_07_HC340LA_1,5_ENAW6016_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_08_HC340LA_2,0_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_09_HC340LA_2,0_ENAW6016_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_11_HC340LA_1,5_AlSi7Mg0,3_3,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_13_HC340LA_1,0_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_15_HC340LA_1,5_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_16_HC340LA_1,5_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_17_HC340LA_2,0_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_25_HCT980XD_1,75_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_26_HCT980XD_1,75_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_27_22MnB5_1,0_ENAW6016_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_28_22MnB5_1,5_ENAW7021_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_33_ENAW6016_1,0_HC340LA_1,5", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_35_ENAW6016_1,5_HC340LA_2,0", "/method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_36_ENAW6016_2,0_HC340LA_1,5", "file:///method/fosta/P1032-Einseitig_Zugänglich/1_Ergebnisse/Reihe_40_ENAW6016_1,5_AlSi7Mg0,3_3,0"]
     files = []
     for (dirpath, dirnames, filenames) in os.walk(path):
         for index, file_i in enumerate(filenames):
             if file_i.endswith(".xlsx"):
-                files.append(os.path.join(dirpath, file_i))
+                    files.append(os.path.join(dirpath, file_i))
 
     exportpath = "/tmp/tp_ks"
     if os.path.exists(exportpath):
@@ -114,9 +117,13 @@ if __name__ == '__main__':
     for fil in files:
         print("_" * 80)
         file_path = os.path.join(path, fil)
-        print("load {}".format(file_path))
-        series = import_ks2_series(file_path)
-        tp.add_series(series)
+        if "reihe" in file_path.lower():
+
+            print("load {}".format(file_path))
+            series = import_ks2_series(file_path)
+            tp.add_series(series)
+        else:
+            print("skip {}".format(file_path))
 
     tp.to_folder(exportpath)
     tp.tree_folder(exportpath)
