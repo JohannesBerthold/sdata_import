@@ -215,6 +215,6 @@ if __name__ == '__main__':
             versagensart = row[103+i]
             print(testid, i+1, versagensart)
             failure_modes[testid] = versagensart
-        print (versagensart)
+        #print (versagensart)
 
 print(failure_modes)
